@@ -39,4 +39,34 @@ class JokeController extends BaseController {
     echo "$result";
     fclose($fp);
   }
+
+  public function getFunPic()
+  {
+    header('Content-type:text/html; charset=utf-8');
+
+    $appKey = '*****APP_KEY******';
+
+    $url = 'http://japi.juhe.cn/joke/img/list.from';
+    $params = array(
+      "sort" => "desc",
+      "page" => $_GET['page'],
+      "pagesize" => 20,
+      "time" => time(),
+      "key" => $appKey
+    );
+    $paramstring = http_build_query($params);
+
+
+    $uri = $url.'?'.$paramstring;
+
+    $fp = fopen($uri, 'r');
+    stream_get_meta_data($fp);
+    $result = "";
+    while(!feof($fp)) {
+      $result .= fgets($fp, 1024);
+    }
+    echo "$result";
+    fclose($fp);
+
+  }
 }
