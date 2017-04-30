@@ -11,6 +11,11 @@ namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 
 class JokeController extends BaseController {
+
+  public function main()
+  {
+    return "笑话趣图收集下载地址：\n" . "http://a.app.qq.com/o/simple.jsp?pkgname=chenyu.jokes ";
+  }
   public function getJokes()
   {
     header('Content-type:text/html; charset=utf-8');

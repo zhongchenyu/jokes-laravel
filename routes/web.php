@@ -20,3 +20,5 @@ Route::get('foo', function () {
 });
 
 Route::get('test', 'TestController@test');
+
+Route::get('jokes', 'JokeController@main');
