@@ -17,6 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
+  $api->get('jokes', 'JokeController@getJokes');
+  $api->get('pictures', 'JokeController@getFunPic');
+  $api->get('blacklist', 'JokeController@getBlackList');
+});
+
+/*
 Route::get('apitest', 'TestController@test');
 
 Route::get('jokes', 'JokeController@getJokes');
@@ -43,4 +53,6 @@ Route::get('blacklist', function () {
 }
 
   ');
+
 });
+*/
