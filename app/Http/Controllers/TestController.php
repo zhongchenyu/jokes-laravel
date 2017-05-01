@@ -8,10 +8,25 @@
 
 namespace App\Http\Controllers;
 
+use JWTAuth;
+use App\User;
 use Illuminate\Routing\Controller as BaseController;
-class TestController extends BaseController{
+
+class TestController extends BaseController {
   public function test()
   {
-    return 'test';
+    $newUser = [
+      'name' => 'new',
+      'email' => 'new',
+      'password' => 'new',
+    ];
+    //User::create($newUser);
+    $user  = User::first();
+    $token = JWTAuth::fromUser($user);
+    //$id    = $token->authenticate()->id;
+    return [
+      'token' => $token,
+      //'id'    => $id,
+    ];
   }
 }

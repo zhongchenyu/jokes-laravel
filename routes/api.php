@@ -24,6 +24,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('jokes', 'JokeController@getJokes');
   $api->get('pictures', 'JokeController@getFunPic');
   $api->get('blacklist', 'JokeController@getBlackList');
+  $api->get('login', 'Auth\AuthenticateController@authenticate');
+  $api->get('test', 'TestController@test');
+  $api->post('register', 'Auth\RegisterController@register');
+
+
+  $api->group(['middleware' => 'jwt.auth', 'providers' => 'jwt'], function ($api) { //
+    $api->get('users', 'UserController@getUserInfo');
+  });
 });
 
 /*
