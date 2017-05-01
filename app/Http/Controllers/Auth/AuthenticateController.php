@@ -21,7 +21,7 @@ class AuthenticateController extends Controller
     // grab credentials from the request
     $credentials = $request->only('email', 'password');
 
-    $user=User::where('email','=',$credentials['email'])->where('password', '=', $credentials['password'])->first();
+    //$user=User::where('email','=',$credentials['email'])->where('password', '=', $credentials['password'])->first();
 
 
     try {
@@ -33,8 +33,9 @@ class AuthenticateController extends Controller
       // something went wrong whilst attempting to encode the token
       return response()->json(['error' => 'could_not_create_token'], 500);
     }
-
+    $user = User::where('email', $credentials['email'])->first();
+    return ['user'=> $user, 'token' => $token];
     // all good so return the token
-    return response()->json(compact('token'));
+    //return response()->json(compact('token'));
   }
 }
