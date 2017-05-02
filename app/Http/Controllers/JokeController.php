@@ -26,7 +26,7 @@ class JokeController extends BaseController {
       $page = 1;
     }
 
-    $appKey = '*****APP_KEY******';
+    $appKey = env('JUHE_API_KEY');
     //$appKey = 'error_token';
     $url         = 'http://japi.juhe.cn/joke/content/list.from';
     $params      = array(
@@ -61,7 +61,7 @@ class JokeController extends BaseController {
 
     header('Content-type:text/html; charset=utf-8');
 
-    $appKey = '*****APP_KEY******';
+    $appKey = env('JUHE_API_KEY');
 
     $url = 'http://japi.juhe.cn/joke/img/list.from';
     $params = array(
