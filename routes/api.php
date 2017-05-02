@@ -30,7 +30,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
 
 
   $api->group(['middleware' => 'jwt.auth', 'providers' => 'jwt'], function ($api) { //
-    $api->get('users', 'UserController@getUserInfo');
+    $api->get('user', 'UserController@getUserInfo');
     $api->get('notices', 'NoticeController@index');
   });
 });
