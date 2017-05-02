@@ -28,7 +28,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('test', 'TestController@test');
   $api->post('register', 'Auth\RegisterController@register');
 
-
   $api->group(['middleware' => 'jwt.auth', 'providers' => 'jwt'], function ($api) { //
     $api->get('user', 'UserController@getUserInfo');
     $api->get('notices', 'NoticeController@index');
