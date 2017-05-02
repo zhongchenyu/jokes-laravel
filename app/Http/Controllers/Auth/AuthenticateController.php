@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Transformer\UserTransformer;
 use JWTAuth;
 //use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -34,7 +35,8 @@ class AuthenticateController extends Controller
       return response()->json(['error' => 'could_not_create_token'], 500);
     }
     $user = User::where('email', $credentials['email'])->first();
-    return ['user'=> $user, 'token' => $token];
+    $userTransform = new UserTransformer();
+    return ['user'=> $userTransform->transform($user), 'token' => $token];
     // all good so return the token
     //return response()->json(compact('token'));
   }
