@@ -25,7 +25,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('pictures', 'JokeController@getFunPic');
 
   $api->get('my_jokes', 'LocalJokeController@getJokes');   //获取本地服务器打的笑话列表
-  $api-get('my_images', 'LocalJokeController@getImages');  //获取服务器本地的趣图列表
+  $api->get('my_images', 'LocalJokeController@getImages');  //获取服务器本地的趣图列表
   $api->get('blacklist', 'JokeController@getBlackList');
   $api->get('login', 'Auth\AuthenticateController@authenticate');
   $api->get('test', 'TestController@test');
