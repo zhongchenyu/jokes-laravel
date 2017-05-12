@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Note;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,5 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+      factory(Note::class, 30)->create();
+
+      $this->command->info('完成');
     }
 }

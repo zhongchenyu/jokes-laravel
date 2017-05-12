@@ -52,4 +52,14 @@ $app->singleton(
 |
 */
 
+/*
+// json 输出格式
+$app['Dingo\Api\Transformer\Factory']->setAdapter(function ($app) {
+  $fractal = new League\Fractal\Manager;
+  $fractal->setSerializer(new App\Http\Common\NoDataArraySerializer);
+  return new Dingo\Api\Transformer\Adapter\Fractal($fractal);
+});
+*/
+
+//Dingo\Api\Http\Response::addFormatter('jsonp', new Dingo\Api\Http\Response\Format\Jsonp);
 return $app;

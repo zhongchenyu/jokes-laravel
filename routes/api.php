@@ -31,6 +31,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->group(['middleware' => 'jwt.auth', 'providers' => 'jwt'], function ($api) { //
     $api->get('user', 'UserController@getUserInfo');
     $api->get('notices', 'NoticeController@index');
+    $api->get('notes', 'NoteController@index');
+    $api->post('notes', 'NoteController@create');
   });
 });
 
