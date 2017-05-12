@@ -52,7 +52,7 @@ class JokeSpider extends Command {
       'timeout'  => 2.0
     ]);
     $this->info('Begin to get data before ' . date('Y-m-d H:i:s', $time) . ' with ' . $totalPage . ' pages data，20 data per page，total' . 20 * $totalPage . 'data');
-    for ($page = 1; $page < $totalPage; $page++) {
+    for ($page = 1; $page <= $totalPage; $page++) {
       $this->info('requesting data of page ' . $page);
       $response = $client->request('GET', 'list.from', [
           'query' => [

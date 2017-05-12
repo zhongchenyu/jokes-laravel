@@ -25,7 +25,7 @@ class ImageSpider extends Command {
 
   public function handle()
   {
-   
+
     $uri           = 'http://japi.juhe.cn/joke/';
     $logPath       = 'joke_spider/image_spider_log';
     $timeStorePath = 'joke_spider/image_earliest_time';
@@ -47,7 +47,7 @@ class ImageSpider extends Command {
       'timeout'  => 2.0
     ]);
     $this->info('Begin to get data before ' . date('Y-m-d H:i:s', $time) . ' with ' . $totalPage . ' pages data，20 data per page，total' . 20 * $totalPage . 'data');
-    for ($page = 1; $page < $totalPage; $page++) {
+    for ($page = 1; $page <= $totalPage; $page++) {
       $this->info('requesting data of page ' . $page);
       $response = $client->request('GET', 'img/list.from', [
           'query' => [
@@ -94,7 +94,7 @@ class ImageSpider extends Command {
 
 
         } else {
-          Storage::disk('local')->append($logPath, '[' . date('Y-m-d H:i:s', time()) . ']' . " ignore repeated data，hashId：" . $params['hashId']);
+          Storage::disk('local')->append($logPath, '[' . date('Y-m-d H:i:s', time()) . ']' . " ignore repeated data，hashId: " . $params['hashId']);
           $this->info(" ignore repeated data，hashId：" . $params['hashId']);
         }
 
