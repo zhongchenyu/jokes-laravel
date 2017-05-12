@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
       Commands\MultithreadingRequest::class,
-      Commands\JokeSpider::class
+      Commands\JokeSpider::class,
+      Commands\ImageSpider::class,
     ];
 
     /**

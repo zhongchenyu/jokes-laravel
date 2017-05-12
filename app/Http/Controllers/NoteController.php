@@ -8,11 +8,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Transformer\NoteTransformer;
-//use Dingo\Api\Contract\Http\Request;
-use JWTAuth;
 use App\Note;
+use App\Transformer\NoteTransformer;
 use Illuminate\Http\Request;
+use JWTAuth;
+
+//use Dingo\Api\Contract\Http\Request;
 //use Laravel\Lumen\Routing\Controller;
 
 class NoteController extends BaseController {
