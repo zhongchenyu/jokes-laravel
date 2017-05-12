@@ -51,7 +51,7 @@ class JokeSpider extends Command {
       'base_uri' => $uri,
       'timeout'  => 2.0
     ]);
-    $this->info('Begin to get data before ' . date('Y-m-d H:i:s', $time) . ' with ' . $totalPage . ' pages data，20 data per page，total' . 20 * $totalPage . 'data');
+    $this->info('Begin to get data before ' . date('Y-m-d H:i:s', $time) . ' with ' . $totalPage . ' pages data, 20 data per page, total' . 20 * $totalPage . 'data');
     for ($page = 1; $page <= $totalPage; $page++) {
       $this->info('requesting data of page ' . $page);
       $response = $client->request('GET', 'list.from', [
@@ -98,8 +98,8 @@ class JokeSpider extends Command {
 
 
         } else {
-          Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'." ignore repeated data，hashId：".$params['hashId']);
-          $this->info(" ignore repeated data，hashId：".$params['hashId']);
+          Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'." ignore repeated data, hashId：".$params['hashId']);
+          $this->info(" ignore repeated data, hashId：".$params['hashId']);
         }
 
       }
