@@ -28,7 +28,7 @@ class LocalJokeController extends BaseController {
     $timestamp = date('Y-m-d H:i:s', $time);
     $page      = $request->input('page', 1);
 
-    $jokes = Joke::where('updated_at', '<=', $timestamp)->orderBy('updated_at')->forPage($page, 20)->get();
+    $jokes = Joke::where('updated_at', '<=', $timestamp)->orderBy('updated_at', 'DESC')->forPage($page, 20)->get();
 
     return $this->response->collection($jokes, new JokeTransformer);
   }
@@ -43,7 +43,7 @@ public function getImages(Request $request) {
   $timestamp = date('Y-m-d H:i:s', $time);
   $page      = $request->input('page', 1);
 
-  $images = Image::where('updated_at', '<=', $timestamp)->orderBy('updated_at')->forPage($page, 20)->get();
+  $images = Image::where('updated_at', '<=', $timestamp)->orderBy('updated_at', 'DESC')->forPage($page, 20)->get();
 
   return $this->response->collection($images, new ImageTransformer);
 }
