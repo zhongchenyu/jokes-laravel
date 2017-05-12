@@ -51,9 +51,9 @@ class JokeSpider extends Command {
       'base_uri' => $uri,
       'timeout'  => 2.0
     ]);
-    $this->info('准备获取从 ' . date('Y-m-d H:i:s', $time) . ' 往前的 ' . $totalPage . ' 页数据，每页 20个数据，共' . 20 * $totalPage . '个数据');
+    $this->info('Begin to get data before ' . date('Y-m-d H:i:s', $time) . ' with ' . $totalPage . ' pages data，20 data per page，total' . 20 * $totalPage . 'data');
     for ($page = 1; $page < $totalPage; $page++) {
-      $this->info('请求第' . $page . '页数据');
+      $this->info('requesting data of page ' . $page);
       $response = $client->request('GET', 'list.from', [
           'query' => [
             'sort'     => 'desc',
@@ -91,27 +91,27 @@ class JokeSpider extends Command {
             $this->warn($exception->getMessage());
             Storage::disk('local')->put($logPath, '['.date('Y-m-d H:i:s', time()).']'.$exception->getMessage());
           }finally {
-            $this->info('存储第' . $page . '页的第' . ($key + 1) . '个数据成功');
+            $this->info('Stored page ' . $page . '\'s ' . ($key + 1) . 'th data');
             $earliestTime = $params['origin_unix_time'];
             Storage::disk('local')->put($timeStorePath, $earliestTime+100);
           }
 
 
         } else {
-          Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'." 忽略重复数据，hashId：".$params['hashId']);
-          $this->info(" 忽略重复数据，hashId：".$params['hashId']);
+          Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'." ignore repeated data，hashId：".$params['hashId']);
+          $this->info(" ignore repeated data，hashId：".$params['hashId']);
         }
 
       }
-      $this->info("暂停10秒...");
+      $this->info("wait 10 seconds...");
       sleep(10);
     }
 
 
     Storage::disk('local')->put($timeStorePath, $earliestTime+100);
 
-    $this->info('本次运行结束,数据更新到' . date('Y-m-d H:i:s', $earliestTime));
-    Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'.'本次运行结束,数据更新到' . date('Y-m-d H:i:s', $earliestTime));
+    $this->info('Complete, update data to ' . date('Y-m-d H:i:s', $earliestTime));
+    Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'.'Complete, update data to' . date('Y-m-d H:i:s', $earliestTime));
   }
 
 }

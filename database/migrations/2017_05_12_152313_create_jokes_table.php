@@ -15,7 +15,7 @@ class CreateJokesTable extends Migration
   {
     Schema::create('jokes', function (Blueprint $table) {
       $table->increments('id');
-      $table->text("content", 512);
+      $table->text("content");
       $table->string("hashId");
       $table->string("origin_unix_time");
       $table->string("origin_update_time", 64);
