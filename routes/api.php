@@ -21,8 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
-  $api->get('jokes', 'JokeController@getJokes');
+  $api->get('jokes', 'JokeController@getJokes');  //获取远端服务器笑话列表
   $api->get('pictures', 'JokeController@getFunPic');
+
+  $api->get('my_jokes', 'LocalJokeController@getJokes');   //获取本地服务器打的笑话列表
   $api->get('blacklist', 'JokeController@getBlackList');
   $api->get('login', 'Auth\AuthenticateController@authenticate');
   $api->get('test', 'TestController@test');
