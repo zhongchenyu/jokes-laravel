@@ -10,7 +10,11 @@ class Joke extends Model
     "content",
     "hashId",
     "origin_unix_time",
-    "origin_update_time"
+    "origin_update_time",
+    "up_amount",
+    "down_amount",
+    "collect_amount",
+    "comment_amount",
   ];
 
   protected $hidden = [

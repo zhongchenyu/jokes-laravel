@@ -20,7 +20,7 @@ class LocalJokeController extends BaseController {
   public function getJokes(Request $request)
   {
     $this->validate($request, [
-      'time' => 'required',
+      //'time' => 'required',
       'page' => 'integer'
     ]);
 
@@ -35,7 +35,7 @@ class LocalJokeController extends BaseController {
 
 public function getImages(Request $request) {
   $this->validate($request, [
-    'time' => 'required',
+    //'time' => 'required',
     'page' => 'integer'
   ]);
 
