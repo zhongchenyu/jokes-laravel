@@ -3,28 +3,24 @@
  * Created by PhpStorm.
  * User: chenyu
  * Date: 2017/5/13
- * Time: 1:11
+ * Time: 20:46
  */
 
 namespace App\Http\Controllers;
 
 use App\Image;
-use App\Joke;
-use App\JokeAttitude;
-use App\JokeComment;
+use App\ImageAttitude;
+use App\ImageComment;
 use App\Transformer\ImageTransformer;
-use App\Transformer\JokeCommentTransformer;
-use App\Transformer\JokeTransformer;
+use App\Transformer\ImageCommentTransformer;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-
-class LocalJokeController extends BaseController {
-
-  public function getJokes(Request $request)
+class LocalImageController extends BaseController{
+  public function getImages(Request $request)
   {
     $this->validate($request, [
       //'time' => 'required',
@@ -39,53 +35,50 @@ class LocalJokeController extends BaseController {
     }catch (JWTException $exception) {
       $userId = 0;
     }
-
+    
     $time      = $request->input('time', time());
     $timestamp = date('Y-m-d H:i:s', $time);
     $page      = $request->input('page', 1);
 
-    $jokes = Joke::where('updated_at', '<=', $timestamp)->orderBy('updated_at', 'DESC')->forPage($page, 20)->get();
-
+    $images = Image::where('updated_at', '<=', $timestamp)->orderBy('updated_at', 'DESC')->forPage($page, 20)->get();
     if($userId == 0) {
-      foreach ($jokes as $joke) {
-        $joke->my_attitude = 0;
-        $joke->my_collected = 0;
+      foreach ($images as $image) {
+        $image->my_attitude = 0;
+        $image->my_collected = 0;
       }
     } else {
-      foreach ($jokes as $joke) {
-        $attitude = JokeAttitude::where('joke_id', $joke->id)->where('user_id', $userId)->first();
+      foreach ($images as $image) {
+        $attitude = ImageAttitude::where('image_id', $image->id)->where('user_id', $userId)->first();
         if($attitude == null) {
-          $joke->my_attitude = 0;
-          $joke->my_collected = 0;
+          $image->my_attitude = 0;
+          $image->my_collected = 0;
 
         } else {
-          $joke->my_attitude = $attitude->attitude;
-          $joke->my_collected = $attitude->collected;
+          $image->my_attitude = $attitude->attitude;
+          $image->my_collected = $attitude->collected;
         }
       }
     }
-    return $this->response->collection($jokes, new JokeTransformer);
+    return $this->response->collection($images, new ImageTransformer);
   }
 
-
-
-  public function collect($jokeId)
+  public function collect($imageId)
   {
     $userId   = JWTAuth::parseToken()->authenticate()->id;
-    $attitude = JokeAttitude::where('joke_id', $jokeId)->where('user_id', $userId)->first();
-    $joke     = Joke::where('id', $jokeId)->first();
-    if ($joke == null) {
-      return response(['message' => 'Joke don\'t exists'], Response::HTTP_NOT_FOUND);
+    $attitude = ImageAttitude::where('image_id', $imageId)->where('user_id', $userId)->first();
+    $image     = Image::where('id', $imageId)->first();
+    if ($image == null) {
+      return response(['message' => 'Image don\'t exists'], Response::HTTP_NOT_FOUND);
     }
     if ($attitude == null) {
-      $attitude = JokeAttitude::create([
-        'joke_id'   => $jokeId,
+      $attitude = ImageAttitude::create([
+        'image_id'   => $imageId,
         'user_id'   => $userId,
         'collected' => true
       ]);
       if ($attitude != null) {
-        $joke->collect_amount++;
-        $joke->save();
+        $image->collect_amount++;
+        $image->save();
       } else {
         return response(['message' => 'fail'], Response::HTTP_INTERNAL_SERVER_ERROR);
       }
@@ -93,30 +86,30 @@ class LocalJokeController extends BaseController {
     } else {
       $attitude->collected = !($attitude->collected);
       $attitude->save();
-      $joke->collect_amount = $attitude->collected ? $joke->collect_amount + 1 : $joke->collect_amount - 1;
-      $joke->save();
+      $image->collect_amount = $attitude->collected ? $image->collect_amount + 1 : $image->collect_amount - 1;
+      $image->save();
     }
 
     return response(['message' => 'success'], Response::HTTP_ACCEPTED);
   }
 
-  public function up($jokeId)
+  public function up($imageId)
   {
     $userId   = JWTAuth::parseToken()->authenticate()->id;
-    $attitude = JokeAttitude::where('joke_id', $jokeId)->where('user_id', $userId)->first();
-    $joke     = Joke::where('id', $jokeId)->first();
-    if ($joke == null) {
-      return response(['message' => 'Joke don\'t exists'], Response::HTTP_NOT_FOUND);
+    $attitude = ImageAttitude::where('image_id', $imageId)->where('user_id', $userId)->first();
+    $image     = Image::where('id', $imageId)->first();
+    if ($image == null) {
+      return response(['message' => 'Image don\'t exists'], Response::HTTP_NOT_FOUND);
     }
     if ($attitude == null) {
-      $attitude = JokeAttitude::create([
-        'joke_id'  => $jokeId,
+      $attitude = ImageAttitude::create([
+        'image_id'  => $imageId,
         'user_id'  => $userId,
         'attitude' => 1
       ]);
       if ($attitude != null) {
-        $joke->up_amount++;
-        $joke->save();
+        $image->up_amount++;
+        $image->save();
       } else {
         return response(['message' => 'fail'], Response::HTTP_INTERNAL_SERVER_ERROR);
       }
@@ -130,39 +123,39 @@ class LocalJokeController extends BaseController {
         case -1:
           $attitude->attitude = 1;
           $attitude->save();
-          $joke->up_amount   = $joke->up_amount + 1;
-          $joke->down_amount = $joke->down_amount - 1;
-          $joke->save();
+          $image->up_amount   = $image->up_amount + 1;
+          $image->down_amount = $image->down_amount - 1;
+          $image->save();
           break;
         case 0:
         default:
           $attitude->attitude = 1;
           $attitude->save();
-          $joke->up_amount = $joke->up_amount + 1;
-          $joke->save();
+          $image->up_amount = $image->up_amount + 1;
+          $image->save();
       }
     }
 
     return response(['message' => 'success'], Response::HTTP_ACCEPTED);
   }
 
-  public function down($jokeId)
+  public function down($imageId)
   {
     $userId   = JWTAuth::parseToken()->authenticate()->id;
-    $attitude = JokeAttitude::where('joke_id', $jokeId)->where('user_id', $userId)->first();
-    $joke     = Joke::where('id', $jokeId)->first();
-    if ($joke == null) {
-      return response(['message' => 'Joke don\'t exists'], Response::HTTP_NOT_FOUND);
+    $attitude = ImageAttitude::where('image_id', $imageId)->where('user_id', $userId)->first();
+    $image     = Image::where('id', $imageId)->first();
+    if ($image == null) {
+      return response(['message' => 'Image don\'t exists'], Response::HTTP_NOT_FOUND);
     }
     if ($attitude == null) {
-      $attitude = JokeAttitude::create([
-        'joke_id'  => $jokeId,
+      $attitude = ImageAttitude::create([
+        'image_id'  => $imageId,
         'user_id'  => $userId,
         'attitude' => -1
       ]);
       if ($attitude != null) {
-        $joke->down_amount++;
-        $joke->save();
+        $image->down_amount++;
+        $image->save();
       } else {
         return response(['message' => 'fail'], Response::HTTP_INTERNAL_SERVER_ERROR);
       }
@@ -176,23 +169,23 @@ class LocalJokeController extends BaseController {
         case 1:
           $attitude->attitude = -1;
           $attitude->save();
-          $joke->up_amount   = $joke->up_amount - 1;
-          $joke->down_amount = $joke->down_amount + 1;
-          $joke->save();
+          $image->up_amount   = $image->up_amount - 1;
+          $image->down_amount = $image->down_amount + 1;
+          $image->save();
           break;
         case 0:
         default:
           $attitude->attitude = -1;
           $attitude->save();
-          $joke->down_amount = $joke->down_amount + 1;
-          $joke->save();
+          $image->down_amount = $image->down_amount + 1;
+          $image->save();
       }
     }
 
     return response(['message' => 'success'], Response::HTTP_ACCEPTED);
   }
 
-  public function comment(Request $request, $jokeId)
+  public function comment(Request $request, $imageId)
   {
     $this->validate($request, [
       'comment'  => 'required',
@@ -200,17 +193,17 @@ class LocalJokeController extends BaseController {
     ]);
     $userId  = JWTAuth::parseToken()->authenticate()->id;
     $comment = $request->input('comment');
-    $joke    = Joke::where('id', $jokeId)->first();
-    if ($joke == null) {
+    $image    = Image::where('id', $imageId)->first();
+    if ($image == null) {
       return response(['message' => '笑话不存在'], Response::HTTP_NOT_FOUND);
     }
     $replyId = $request->input('reply_id', 0);
-    if ($replyId != 0 && JokeComment::where('id', $replyId)->get()->isEmpty()) {
+    if ($replyId != 0 && ImageComment::where('id', $replyId)->get()->isEmpty()) {
       return response(['message' => '被回复的评论不存在'], Response::HTTP_NOT_FOUND);
     }
 
-    $comment = JokeComment::create([
-      'joke_id'  => $jokeId,
+    $comment = ImageComment::create([
+      'image_id'  => $imageId,
       'user_id'  => $userId,
       'comment'  => $comment,
       'reply_id' => $replyId
@@ -218,9 +211,9 @@ class LocalJokeController extends BaseController {
     if ($comment == null) {
       return response(['message' => '评论失败'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-    $joke->comment_amount++;
-    $joke->save();
-    return $this->response->item($comment, new JokeCommentTransformer)->setStatusCode(Response::HTTP_CREATED)->addMeta('message', 'success');
+    $image->comment_amount++;
+    $image->save();
+    return $this->response->item($comment, new ImageCommentTransformer)->setStatusCode(Response::HTTP_CREATED)->addMeta('message', 'success');
     //return response(['message' => '评论成功'], Response::HTTP_CREATED);
   }
 }

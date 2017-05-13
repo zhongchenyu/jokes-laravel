@@ -15,10 +15,16 @@ class JokeTransformer extends TransformerAbstract {
   public function transform(Joke $joke)
   {
     return [
-      'id'         => $joke->id,
-      'content'    => $joke->content,
-      'hashId'     => $joke->hashId,
-      'updatetime' => strtotime($joke->updated_at)
+      'id'             => $joke->id,
+      'content'        => $joke->content,
+      'hashId'         => $joke->hashId,
+      'updatetime'     => strtotime($joke->updated_at),
+      'up_amount'      => $joke->up_amount,
+      'down_amount'    => $joke->down_amount,
+      'collect_amount' => $joke->collect_amount,
+      'comment_amount' => $joke->comment_amount,
+      'my_attitude'    => $joke->my_attitude,
+      'my_collected'   => $joke->my_collected
     ];
   }
 }

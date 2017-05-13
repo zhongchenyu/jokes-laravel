@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
 });
 
 
@@ -25,7 +25,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('pictures', 'JokeController@getFunPic'); //获取远端服务器趣图列表
 
   $api->get('my_jokes', 'LocalJokeController@getJokes');   //获取本地服务器打的笑话列表
-  $api->get('my_images', 'LocalJokeController@getImages');  //获取服务器本地的趣图列表
+  $api->get('my_images', 'LocalImageController@getImages');  //获取服务器本地的趣图列表
   $api->get('blacklist', 'JokeController@getBlackList');
   $api->get('login', 'Auth\AuthenticateController@authenticate');
   $api->get('test', 'TestController@test');
@@ -36,6 +36,16 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->get('notices', 'NoticeController@index');
     $api->get('notes', 'NoteController@index');
     $api->post('notes', 'NoteController@create');
+
+    $api->post('my_jokes/{joke_id}/collection', 'LocalJokeController@collect');  //收藏笑话
+    $api->post('my_jokes/{joke_id}/up', 'LocalJokeController@up');  //顶笑话
+    $api->post('my_jokes/{joke_id}/down', 'LocalJokeController@down');  //踩笑话
+    $api->post('my_jokes/{joke_id}/comment', 'LocalJokeController@comment'); //评论笑话
+
+    $api->post('my_images/{joke_id}/collection', 'LocalImageController@collect');  //收藏趣图
+    $api->post('my_images/{joke_id}/up', 'LocalImageController@up');  //顶趣图
+    $api->post('my_images/{joke_id}/down', 'LocalImageController@down');  //踩趣图
+    $api->post('my_images/{joke_id}/comment', 'LocalImageController@comment'); //评论趣图
   });
 });
 
