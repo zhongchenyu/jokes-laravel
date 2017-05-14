@@ -40,7 +40,7 @@ class ImageSpider extends Command {
 
 
     $earliestTime = $time;
-    $totalPage    = 20;
+    $totalPage    = 50;
 
     $client = new Client([
       'base_uri' => $uri,
