@@ -124,7 +124,11 @@ class LocalJokeController extends BaseController {
     } else {
       switch ($attitude->attitude) {
         case 1:
-          return response(['message' => '已经顶过了'], Response::HTTP_BAD_REQUEST);
+          $attitude->attitude = 0;
+          $attitude->save();
+          $joke->up_amount   = $joke->up_amount - 1;
+          $joke->save();
+          return response(['message' => '减少一个'], Response::HTTP_ACCEPTED);
           break;
 
         case -1:
@@ -171,7 +175,11 @@ class LocalJokeController extends BaseController {
     } else {
       switch ($attitude->attitude) {
         case -1:
-          return response(['message' => '已经踩过了'], Response::HTTP_BAD_REQUEST);
+          $attitude->attitude = 0;
+          $attitude->save();
+          $joke->down_amount   = $joke->down_amount - 1;
+          $joke->save();
+          return response(['message' => '减少一个'], Response::HTTP_ACCEPTED);
           break;
 
         case 1:
