@@ -106,7 +106,7 @@ class LocalJokeController extends BaseController {
     $attitude = JokeAttitude::where('joke_id', $jokeId)->where('user_id', $userId)->first();
     $joke     = Joke::where('id', $jokeId)->first();
     if ($joke == null) {
-      return response(['message' => 'Joke don\'t exists'], Response::HTTP_NOT_FOUND);
+      return response(['message' => 'Joke does not exist'], Response::HTTP_NOT_FOUND);
     }
     if ($attitude == null) {
       $attitude = JokeAttitude::create([
@@ -124,7 +124,7 @@ class LocalJokeController extends BaseController {
     } else {
       switch ($attitude->attitude) {
         case 1:
-          return response(['message' => '已经顶过了']);
+          return response(['message' => '已经顶过了'], Response::HTTP_BAD_REQUEST);
           break;
 
         case -1:
@@ -133,6 +133,7 @@ class LocalJokeController extends BaseController {
           $joke->up_amount   = $joke->up_amount + 1;
           $joke->down_amount = $joke->down_amount - 1;
           $joke->save();
+          return response(['message' => '转换一个'], Response::HTTP_ACCEPTED);
           break;
         case 0:
         default:
@@ -143,7 +144,7 @@ class LocalJokeController extends BaseController {
       }
     }
 
-    return response(['message' => 'success'], Response::HTTP_ACCEPTED);
+    return response(['message' => '增加一个'], Response::HTTP_ACCEPTED);
   }
 
   public function down($jokeId)
@@ -170,7 +171,7 @@ class LocalJokeController extends BaseController {
     } else {
       switch ($attitude->attitude) {
         case -1:
-          return response(['message' => '已经踩过了']);
+          return response(['message' => '已经踩过了'], Response::HTTP_BAD_REQUEST);
           break;
 
         case 1:
@@ -179,6 +180,7 @@ class LocalJokeController extends BaseController {
           $joke->up_amount   = $joke->up_amount - 1;
           $joke->down_amount = $joke->down_amount + 1;
           $joke->save();
+          return response(['message' => '转换一个'], Response::HTTP_ACCEPTED);
           break;
         case 0:
         default:
@@ -189,7 +191,7 @@ class LocalJokeController extends BaseController {
       }
     }
 
-    return response(['message' => 'success'], Response::HTTP_ACCEPTED);
+    return response(['message' => '增加一个'], Response::HTTP_ACCEPTED);
   }
 
   public function comment(Request $request, $jokeId)
