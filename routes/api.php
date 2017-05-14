@@ -40,12 +40,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
     $api->post('my_jokes/{joke_id}/collection', 'LocalJokeController@collect');  //收藏笑话
     $api->post('my_jokes/{joke_id}/up', 'LocalJokeController@up');  //顶笑话
     $api->post('my_jokes/{joke_id}/down', 'LocalJokeController@down');  //踩笑话
-    $api->post('my_jokes/{joke_id}/comment', 'LocalJokeController@comment'); //评论笑话
+    $api->post('my_jokes/{joke_id}/comments', 'CommentController@createComment'); //评论笑话
+    $api->get('my_jokes/{joke_id}/comments', 'CommentController@indexComment');  //获取笑话评论列表
 
-    $api->post('my_images/{joke_id}/collection', 'LocalImageController@collect');  //收藏趣图
-    $api->post('my_images/{joke_id}/up', 'LocalImageController@up');  //顶趣图
-    $api->post('my_images/{joke_id}/down', 'LocalImageController@down');  //踩趣图
-    $api->post('my_images/{joke_id}/comment', 'LocalImageController@comment'); //评论趣图
+    $api->post('my_images/{image_id}/collection', 'LocalImageController@collect');  //收藏趣图
+    $api->post('my_images/{image_id}/up', 'LocalImageController@up');  //顶趣图
+    $api->post('my_images/{image_id}/down', 'LocalImageController@down');  //踩趣图
+    $api->post('my_images/{image_id}/comments', 'CommentController@createImageComment'); //评论趣图
+    $api->get('my_images/{image_id}/comments', 'CommentController@indexImageComment');  //获取趣图评论列表
   });
 });
 

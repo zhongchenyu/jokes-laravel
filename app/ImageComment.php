@@ -17,4 +17,13 @@ class ImageComment extends Model
     'updated_at',
     'created_at'
   ];
+
+  public function user() {
+    return $this->belongsTo(User::class, 'user_id', 'id');
+  }
+
+  public function reply()
+  {
+    return $this->belongsTo(ImageComment::class, 'reply_id', 'id');
+  }
 }

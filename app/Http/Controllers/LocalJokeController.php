@@ -13,7 +13,7 @@ use App\Joke;
 use App\JokeAttitude;
 use App\JokeComment;
 use App\Transformer\ImageTransformer;
-use App\Transformer\JokeCommentTransformer;
+use App\Transformer\CommentTransformer;
 use App\Transformer\JokeTransformer;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -202,35 +202,4 @@ class LocalJokeController extends BaseController {
     return response(['message' => '增加一个'], Response::HTTP_ACCEPTED);
   }
 
-  public function comment(Request $request, $jokeId)
-  {
-    $this->validate($request, [
-      'comment'  => 'required',
-      'reply_id' => 'integer'
-    ]);
-    $userId  = JWTAuth::parseToken()->authenticate()->id;
-    $comment = $request->input('comment');
-    $joke    = Joke::where('id', $jokeId)->first();
-    if ($joke == null) {
-      return response(['message' => '笑话不存在'], Response::HTTP_NOT_FOUND);
-    }
-    $replyId = $request->input('reply_id', 0);
-    if ($replyId != 0 && JokeComment::where('id', $replyId)->get()->isEmpty()) {
-      return response(['message' => '被回复的评论不存在'], Response::HTTP_NOT_FOUND);
-    }
-
-    $comment = JokeComment::create([
-      'joke_id'  => $jokeId,
-      'user_id'  => $userId,
-      'comment'  => $comment,
-      'reply_id' => $replyId
-    ]);
-    if ($comment == null) {
-      return response(['message' => '评论失败'], Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
-    $joke->comment_amount++;
-    $joke->save();
-    return $this->response->item($comment, new JokeCommentTransformer)->setStatusCode(Response::HTTP_CREATED)->addMeta('message', 'success');
-    //return response(['message' => '评论成功'], Response::HTTP_CREATED);
-  }
 }
