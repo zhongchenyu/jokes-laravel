@@ -100,7 +100,7 @@ class ImageSpider extends Command {
 
       }
       $this->info("wait 10 seconds...");
-      sleep(10);
+      sleep(2);
     }
 
 
