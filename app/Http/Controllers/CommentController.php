@@ -57,12 +57,13 @@ class CommentController extends BaseController {
     //return response(['message' => '评论成功'], Response::HTTP_CREATED);
   }
 
-  public function indexComment($jokeId)
+  public function indexComment(Request $request, $jokeId)
   {
-    if(Joke::find($jokeId) == null) {
-      return $this->response->error( '笑话不存在', Response::HTTP_NOT_FOUND);
+    if (Joke::find($jokeId) == null) {
+      return $this->response->error('笑话不存在', Response::HTTP_NOT_FOUND);
     }
-    $comments = JokeComment::where('joke_id', $jokeId)->get();
+    $page = $request->input('page',1);
+    $comments = JokeComment::where('joke_id', $jokeId)->forPage($page, 20)->get();
     return $this->response->collection($comments, new CommentTransformer());
   }
 
@@ -70,11 +71,12 @@ class CommentController extends BaseController {
   {
     $this->validate($request, [
       'comment'  => 'required',
-      'reply_id' => 'integer'
+      'reply_id' => 'integer',
     ]);
     $userId  = JWTAuth::parseToken()->authenticate()->id;
     $comment = $request->input('comment');
-    $image    = Image::where('id', $imageId)->first();
+
+    $image   = Image::where('id', $imageId)->first();
     if ($image == null) {
       return response(['message' => '趣图不存在'], Response::HTTP_NOT_FOUND);
     }
@@ -85,7 +87,7 @@ class CommentController extends BaseController {
     }
 
     $comment = ImageComment::create([
-      'image_id'  => $imageId,
+      'image_id' => $imageId,
       'user_id'  => $userId,
       'comment'  => $comment,
       'reply_id' => $replyId
@@ -99,12 +101,13 @@ class CommentController extends BaseController {
     //return response(['message' => '评论成功'], Response::HTTP_CREATED);
   }
 
-  public function indexImageComment($imageId)
+  public function indexImageComment(Request $request, $imageId)
   {
-    if(Image::find($imageId) == null) {
-      return $this->response->error( '趣图不存在', Response::HTTP_NOT_FOUND);
+    if (Image::find($imageId) == null) {
+      return $this->response->error('趣图不存在', Response::HTTP_NOT_FOUND);
     }
-    $comments = ImageComment::where('image_id', $imageId)->get();
+    $page = $request->input('page',1);
+    $comments = ImageComment::where('image_id', $imageId)->forPage($page, 20)->get();
     return $this->response->collection($comments, new CommentTransformer());
   }
 }
