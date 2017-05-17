@@ -18,7 +18,7 @@ class JokeTransformer extends TransformerAbstract {
       'id'             => $joke->id,
       'content'        => $joke->content,
       'hashId'         => $joke->hashId,
-      'updatetime'     => strtotime($joke->updated_at),
+      'updatetime'     => strtotime($joke->created_at),
       'up_amount'      => $joke->up_amount,
       'down_amount'    => $joke->down_amount,
       'collect_amount' => $joke->collect_amount,

@@ -44,7 +44,7 @@ class LocalJokeController extends BaseController {
     $timestamp = date('Y-m-d H:i:s', $time);
     $page      = $request->input('page', 1);
 
-    $jokes = Joke::where('updated_at', '<=', $timestamp)->orderBy('updated_at', 'DESC')->forPage($page, 20)->get();
+    $jokes = Joke::where('updated_at', '<=', $timestamp)->orderBy('created_at', 'DESC')->forPage($page, 20)->get();
 
     if($userId == 0) {
       foreach ($jokes as $joke) {
