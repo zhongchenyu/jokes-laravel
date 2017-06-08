@@ -111,4 +111,8 @@ class JokeController extends BaseController {
 
   ');
   }
+
+  public function info() {
+    echo phpinfo();
+  }
 }
