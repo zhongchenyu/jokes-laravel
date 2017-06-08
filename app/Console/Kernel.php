@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel {
     Commands\MultithreadingRequest::class,
     Commands\JokeSpider::class,
     Commands\ImageSpider::class,
+    Commands\Test::class,
   ];
 
   /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel {
    */
   protected function schedule(Schedule $schedule)
   {
+    $schedule->command('test')->everyMinute();
     $schedule->command('spider:joke')
       ->daily();
     $schedule->command('spider:image')
