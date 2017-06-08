@@ -113,6 +113,7 @@ class JokeController extends BaseController {
   }
 
   public function info() {
+    echo date('Y-m-d H:i:s', time()). '\n';
     echo phpinfo();
   }
 }
