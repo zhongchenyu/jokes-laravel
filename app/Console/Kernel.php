@@ -28,9 +28,9 @@ class Kernel extends ConsoleKernel {
   {
     $schedule->command('test')->everyMinute();
     $schedule->command('spider:joke')
-      ->dailyAt('3:03:00');
+      ->dailyAt('3:53:00');
     $schedule->command('spider:image')
-      ->dailyAt('3:03:00');
+      ->dailyAt('3:53:00');
   }
 
   /**
