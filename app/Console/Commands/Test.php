@@ -37,7 +37,9 @@ class Test extends Command
      */
     public function handle()
     {
+      $logPath = 'joke_spider/test_log';
       $this->info('test');
+      Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'.'test');
       return;
     }
 }
