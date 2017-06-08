@@ -113,6 +113,7 @@ class JokeController extends BaseController {
   }
 
   public function info() {
+    echo date_default_timezone_get () . '<br>';
     echo date('Y-m-d H:i:s'). '<br>';
     echo phpinfo();
   }
