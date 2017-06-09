@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel {
    */
   protected function schedule(Schedule $schedule)
   {
-    $schedule->command('test')->everyMinute();
+    $schedule->command('test')->dailyAt('12:25:00');
     $schedule->command('spider:joke')
       ->dailyAt('3:53:00');
     $schedule->command('spider:image')
