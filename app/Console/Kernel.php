@@ -26,11 +26,11 @@ class Kernel extends ConsoleKernel {
    */
   protected function schedule(Schedule $schedule)
   {
-    $schedule->command('test')->dailyAt('12:25:00');
+    $schedule->command('test')->dailyAt('12:35');
     $schedule->command('spider:joke')
-      ->dailyAt('3:53:00');
+      ->dailyAt('0:03');
     $schedule->command('spider:image')
-      ->dailyAt('3:53:00');
+      ->dailyAt('0:03');
   }
 
   /**
