@@ -1,6 +1,8 @@
 language: php
 php:
   - 7.1
+service:
+  - mysql
 before_script:
   - composer install
   - composer dump-autoload
@@ -8,4 +10,6 @@ before_script:
   - php artisan jwt:generate
   - php artisan key:generate
   - php artisan vendor:publish
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS jokes ;'
+  - php artisan migrate
 script: phpunit
