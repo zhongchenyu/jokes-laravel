@@ -4,7 +4,7 @@ php:
 before_script:
   - composer install
   - composer dump-autoload
-  - cp .env.example .env
+  - cp .env.travis .env
   - php artisan jwt:generate
   - php artisan key:generate
   - php artisan vendor:publish
