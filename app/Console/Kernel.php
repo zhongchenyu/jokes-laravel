@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel {
     Commands\JokeSpider::class,
     Commands\ImageSpider::class,
     Commands\Test::class,
+    Commands\GenerateRSAKey::class,
   ];
 
   /**

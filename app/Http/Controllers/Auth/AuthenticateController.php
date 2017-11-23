@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Tools\RsaUtils;
 use App\Transformer\UserTransformer;
 use JWTAuth;
 //use Tymon\JWTAuth\Facades\JWTAuth;
@@ -39,5 +40,28 @@ class AuthenticateController extends Controller
     return ['user'=> $userTransform->transform($user), 'token' => $token];
     // all good so return the token
     //return response()->json(compact('token'));
+  }
+
+  public function encryptedAuthenticate(Request $request)
+  {
+    $credentials['email'] = $request->get('email');
+    $credentials['password'] = RsaUtils::dePrivate( $request->get('password'));
+
+
+    //$user=User::where('email','=',$credentials['email'])->where('password', '=', $credentials['password'])->first();
+
+
+    try {
+      // attempt to verify the credentials and create a token for the user
+      if (! $token = JWTAuth::attempt($credentials)) {
+        return response()->json(['error' => 'invalid_credentials'], 401);
+      }
+    } catch (JWTException $e) {
+      // something went wrong whilst attempting to encode the token
+      return response()->json(['error' => 'could_not_create_token'], 500);
+    }
+    $user = User::where('email', $credentials['email'])->first();
+    $userTransform = new UserTransformer();
+    return ['user'=> $userTransform->transform($user), 'token' => $token];
   }
 }

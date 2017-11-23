@@ -23,6 +23,7 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('jokes', 'JokeController@getJokes');  //获取远端服务器笑话列表
   $api->get('pictures', 'JokeController@getFunPic'); //获取远端服务器趣图列表
+  $api->get('rsa-test','Auth\RegisterController@rsaTest'); //test rsa
 
   $api->get('my_jokes', 'LocalJokeController@getJokes');   //获取本地服务器打的笑话列表
   $api->get('my_images', 'LocalImageController@getImages');  //获取服务器本地的趣图列表
@@ -30,6 +31,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers'], function ($api) {
   $api->get('login', 'Auth\AuthenticateController@authenticate');
   $api->get('test', 'TestController@test');
   $api->post('register', 'Auth\RegisterController@register');
+  $api->post('encrypted_register', 'Auth\RegisterController@encryptedRegister');  //注册请求对密码进行加密
+  $api->post('encrypted_login', 'Auth\AuthenticateController@encryptedAuthenticate'); //登录请求对密码进行加密
 
   $api->group(['middleware' => 'jwt.auth', 'providers' => 'jwt'], function ($api) { //
     $api->get('user', 'UserController@getUserInfo');

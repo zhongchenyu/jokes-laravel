@@ -1,15 +1,17 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-class Test extends Command
+
+class GenerateRSAKey extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test';
+    protected $signature = 'generate:rsa';
 
     /**
      * The console command description.
@@ -35,13 +37,15 @@ class Test extends Command
      */
     public function handle()
     {
-      $output = shell_exec('pwd');
-      //shell_exec('mkdir '.time());
-      print $output;
-      //echo $output;
-      $logPath = 'joke_spider/test_log';
-      $this->info('test');
-      Storage::disk('local')->append($logPath, '['.date('Y-m-d H:i:s', time()).']'.'test');
+        //
+      echo getcwd() . "\n";
+      chdir('sec');
+      echo getcwd() . "\n";
+      shell_exec('openssl genrsa -out rsa_private_key.pem 1024');
+      shell_exec('openssl pkcs8 -topk8 -inform PEM -in rsa_private_key.pem -outform PEM -nocrypt -out private_key.pem');
+      shell_exec('openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem');
+      chdir('..');
+      echo getcwd() . "\n";
       return;
     }
 }

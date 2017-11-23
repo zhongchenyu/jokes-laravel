@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Controllers;
-
+//require_once('abc.php');
 use Illuminate\Routing\Controller as BaseController;
 
 class JokeController extends BaseController {
