@@ -11,7 +11,7 @@ class GenerateRSAKey extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:rsa';
+    protected $signature = 'rsa:generate';
 
     /**
      * The console command description.

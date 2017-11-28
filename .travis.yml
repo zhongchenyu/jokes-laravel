@@ -12,4 +12,5 @@ before_script:
   - php artisan vendor:publish
   - mysql -e 'CREATE DATABASE IF NOT EXISTS jokes ;'
   - php artisan migrate
+  - php artisan rsa:generate
 script: phpunit

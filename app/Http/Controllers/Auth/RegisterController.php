@@ -84,7 +84,11 @@ class RegisterController extends Controller {
   {
     $this->validator($request->all())->validate();
     $params = $request->all();
-    $params['password'] = RsaUtils::dePrivate($params['password']);
+    $password = RsaUtils::dePrivate($params['password']);
+    if($password == null) {
+      return response()->json(['message' => 'Encryption error'], 400);
+    }
+    $params['password'] = $password;
 
     $user  = $this->create($params);
     $token = JWTAuth::fromUser($user);
@@ -93,7 +97,8 @@ class RegisterController extends Controller {
 
   public function rsaTest(Request $request)
   {
-    $data = $request->get('data','123456');
+    $data = $request->get('data','abcdef');
+    echo 'base64:'.base64_encode($data).'<br>';
     echo $data . '<br>';
     echo 'encrypted by public key<br>';
     $encrypted = RsaUtils::enPublic($data);

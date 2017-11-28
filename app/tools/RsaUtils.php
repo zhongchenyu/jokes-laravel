@@ -1,4 +1,6 @@
-<?php namespace App\Tools;
+<?php
+
+namespace App\Tools;
 
 /**
  * Created by PhpStorm.
@@ -23,6 +25,7 @@ class RsaUtils {
     $path = base_path();
     $privateKey = openssl_get_privatekey(file_get_contents($path.'/sec/rsa_private_key.pem'));
     openssl_private_decrypt(base64_decode($data), $decrypted, $privateKey);
+
     return $decrypted;
   }
 
